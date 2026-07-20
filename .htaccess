@@ -1,0 +1,26 @@
+# .htaccess
+Options -Indexes
+DirectoryIndex index.php
+
+# Protect sensitive folders
+<FilesMatch "\.(sql|log|ini|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect config folder
+<IfModule mod_rewrite.c>
+    RewriteRule ^config/ - [F,L]
+    RewriteRule ^vendor/ - [F,L]
+</IfModule>
+
+# Enable CORS
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Error pages
+ErrorDocument 404 /404.php
+ErrorDocument 403 /403.php
